@@ -1,14 +1,11 @@
 import logo from "../Images/vote2watch10.png"
 import Button from "./Button"
 import Axios from "axios"
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import GuestGameRoom from '../components/GuestGameRoom';
-import HostGameRoom from "../components/HostGameRoom";
 
-const reactRouter = require("react-router-dom")
+// const reactRouter = require("react-router-dom")
 
 //Landing page component
-export const LandingPage = ({ movieData, roomData, movieRoomID, createRoom, guestSearch, setCurrentPage }) => {
+export const LandingPage = ({ roomData, movieRoomID, createRoom, guestSearch, setCurrentPage }) => {
 
     console.log(roomData)
 

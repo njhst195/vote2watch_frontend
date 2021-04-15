@@ -1,9 +1,5 @@
 import Button from "./Button"
 
-const backClick = () => {
-    console.log("click")
-}
-
 export const HostGameRoom = ({ movieData, movieRoomID, setCurrentPage }) => {
 console.log(movieRoomID)
 
@@ -11,7 +7,12 @@ console.log(movieRoomID)
         <div>
             <h1>Welcome to Host Game Room: {movieRoomID}</h1>
             <div>
-                <Button color = "red" text = "Back" onClick = {() => {
+                <Button color = "green" text = "Start Game" onClick = {() => {
+                    setCurrentPage("AddMovieRoom")
+                }}/>
+            </div>
+            <div>
+                <Button color = "red" text = "Exit" onClick = {() => {
                     setCurrentPage("/")
                 }}/>
             </div>

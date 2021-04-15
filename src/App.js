@@ -5,7 +5,7 @@ import LandingPage from "./components/LandingPage";
 import AddMovieRoom from "./components/AddMovieRoom";
 import Axios from "axios";
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+// import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import HostGameRoom from './components/HostGameRoom';
 import GuestGameRoom from './components/GuestGameRoom';
 
@@ -56,11 +56,29 @@ const App = () => {
 
   const conditionalRender = () => {
     if (currentPage == "HostGameRoom") {
-      return(<HostGameRoom movieData = {movieData} movieRoomID = {roomIDData} setCurrentPage = {setCurrentPage}/>)
+      return(<HostGameRoom 
+        movieData = {movieData} 
+        movieRoomID = {roomIDData} 
+        setCurrentPage = {setCurrentPage}
+        />)
     }
     if (currentPage == "GuestGameRoom") {
-      return(<GuestGameRoom movieData = {movieData} setCurrentPage = {setCurrentPage} guestSearch = {guestSearch}/>)
+      return(<GuestGameRoom 
+        roomData = {roomData}
+        movieData = {movieData} 
+        setCurrentPage = {setCurrentPage} 
+        guestSearch = {guestSearch}
+        />)
     }
+    if(currentPage == "AddMovieRoom") {
+      return(<AddMovieRoom 
+        roomData = {roomData} 
+        movieData = {movieData} 
+        addButton = {addButton}
+        setCurrentPage = {setCurrentPage}
+        />)
+    }
+    //Base State is landing page
     return(<LandingPage 
       movieData = {movieData} 
       roomData = {roomData} 
@@ -82,12 +100,12 @@ const App = () => {
   //OnClick for guest room button
   const guestSearch = () => {
     console.log('click')
-}
+  }
 
+  const addButton = () => {
+    console.log('click')
+  }
 
-const goBack = () => {
-  console.log('back')
-}
 
   //use effect (same as ComponentDidMount), runs when component renders
   useEffect(() => {

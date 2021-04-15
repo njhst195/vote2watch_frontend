@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
 import Button from "./Button"
 
-const exitClick = () => {
-    console.log("click");
-}
-
-const addClick = (title) => {
-    console.log(title)
-}
 
 //left off needing to go through the title to get entries
 //then need to go through movieData to check for title in array
-const AddMovieRoom = ({movieData}) => {
+const AddMovieRoom = ({ movieData, addButton, setCurrentPage }) => {
     const [title, setTitle] = useState('')
+
+    console.log(movieData)
 
     return (
         <form className = 'add-form'>
@@ -26,6 +21,7 @@ const AddMovieRoom = ({movieData}) => {
             </div>
             <div> 
                 <Button color = "green" text = "Add" onClick = { () =>{
+                    addButton()
                     console.log('user input is: '+ title)
                     var checkedForTitle = false
                     var titleFound = false
@@ -44,7 +40,9 @@ const AddMovieRoom = ({movieData}) => {
                         alert('Movie not in Netflix Database');
                     }
                 }}/>
-                <Button color = "red" text = "Exit" onClick = {exitClick} link = "/"/>
+                <Button color = "red" text = "Exit" onClick = {() => {
+                    setCurrentPage("/")
+                }}/>
             </div>
         </form>
     )
