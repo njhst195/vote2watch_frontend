@@ -26,6 +26,8 @@ const App = () => {
   const [roomData, setRoomData] = useState([])
   const [movieData, setMovieData] = useState([])
   const [roomIDData, setRoomIDData] = useState([])
+
+  const [userInputTitle, setUserInputTitle] = useState("")
   
   //state of the current page
   //used to render specific pages
@@ -49,7 +51,6 @@ const App = () => {
   const fetchMovies = async () => {
     const res = await Axios.get("http://localhost:3003/api/movies/findAll")
     const data = await res.data
-    console.log(data)
     return data
   }
 
@@ -74,6 +75,8 @@ const App = () => {
       return(<AddMovieRoom 
         roomData = {roomData} 
         movieData = {movieData} 
+        userInputTitle = {userInputTitle}
+        movieRoomID = {roomIDData}
         addButton = {addButton}
         setCurrentPage = {setCurrentPage}
         />)
@@ -102,8 +105,9 @@ const App = () => {
     console.log('click')
   }
 
-  const addButton = () => {
-    console.log('click')
+  const addButton = (movieTitle) => {
+    console.log('click ' + movieTitle)
+    setUserInputTitle(movieTitle)
   }
 
 

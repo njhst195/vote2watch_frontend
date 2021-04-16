@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react';
 export const GuestGameRoom = ({ roomData, setCurrentPage, guestSearch }) => {
     const [searchRoom, setSearchRoom] = useState('')
 
-    console.log(roomData)
-
     return(
         <form className = 'roomSearch-form'>
             <h1>Welcome to Search Room Page</h1>

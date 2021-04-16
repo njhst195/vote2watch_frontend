@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import Button from "./Button"
-
+import Movies from "./Movies"
+import Axios from "axios"
 
 //left off needing to go through the title to get entries
 //then need to go through movieData to check for title in array
-const AddMovieRoom = ({ movieData, addButton, setCurrentPage }) => {
+const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCurrentPage }) => {
     const [title, setTitle] = useState('')
-
-    console.log(movieData)
 
     return (
         <form className = 'add-form'>
@@ -21,28 +20,36 @@ const AddMovieRoom = ({ movieData, addButton, setCurrentPage }) => {
             </div>
             <div> 
                 <Button color = "green" text = "Add" onClick = { () =>{
-                    addButton()
+
                     console.log('user input is: '+ title)
                     var checkedForTitle = false
                     var titleFound = false
 
-                    while(checkedForTitle == false){
-                        for(var i = 0; i < movieData.length; i++){
-                            if(title.toLocaleLowerCase() === movieData[i].movieName.toLocaleLowerCase()){
-                                console.log('in buisness')
-                                titleFound = true
-                                checkedForTitle = true
-                            }
+                    var count = 0
+                    while(checkedForTitle == false && count < movieData.length){
+                        if(title.toLocaleLowerCase() === movieData[count].movieName.toLocaleLowerCase()){
+                            console.log('in buisness')
+                            
+                            addButton(title)
+                            titleFound = true
+                            checkedForTitle = true
                         }
-                        checkedForTitle = true
+                        
+                        count++
                     }
-                    if(titleFound === false){
+                    if(titleFound === true) {
+                       console.log(movieData[count-1]._id) 
+                    } else {
                         alert('Movie not in Netflix Database');
                     }
+                    
                 }}/>
                 <Button color = "red" text = "Exit" onClick = {() => {
                     setCurrentPage("/")
                 }}/>
+            </div>
+                <Movies movieData = {movieData} movieRoomID = {movieRoomID} movieTitle = {userInputTitle}/>
+            <div>
             </div>
         </form>
     )
