@@ -94,7 +94,8 @@ const App = () => {
     //Base State is landing page
     return(<LandingPage 
       movieData = {movieData} 
-      roomIDData = {roomData} 
+      roomIDData = {roomIDData}
+      roomData = {roomData} 
       createRoom = {makeRoom} 
       guestSearch = {guestSearch} 
       setCurrentPage = {setCurrentPage}

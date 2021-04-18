@@ -1,8 +1,12 @@
 import Movies from "./Movies"
 import { useState, useEffect } from 'react'
 
-const VotingRound1 = ({ setCurrentPage, roomData, movieRoomID }) => {
+const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, movieRoomID }) => {
     var roundNum = 1
+
+    console.log(movieData)
+    console.log(userInputTitle)
+    console.log(movieRoomID)
     
     return(
         <div>

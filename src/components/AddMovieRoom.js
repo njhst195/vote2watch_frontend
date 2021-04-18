@@ -34,6 +34,7 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCu
                             checkedForTitle = true
                         }
                         
+
                         count++
                     }
                     if(titleFound === true) {
@@ -47,9 +48,6 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCu
                 <Button color = "red" text = "Exit" onClick = {() => {
                     setCurrentPage("/")
                 }}/>
-            </div>
-                <Movies movieData = {movieData} movieRoomID = {movieRoomID} movieTitle = {userInputTitle}/>
-            <div>
             </div>
         </form>
     )

@@ -7,7 +7,6 @@ import Axios from "axios"
 //Landing page component
 export const LandingPage = ({ roomData, movieRoomID, createRoom, guestSearch, setCurrentPage }) => {
 
-    console.log(roomData)
 
     // console.log(reactRouter.useHistory())
 
