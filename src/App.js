@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 // import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import HostGameRoom from './components/HostGameRoom';
 import GuestGameRoom from './components/GuestGameRoom';
+import VotingRound1 from './components/VotingRound1'
 
 // TODO: Learn about state and setting state
 //===============================================
@@ -81,10 +82,19 @@ const App = () => {
         setCurrentPage = {setCurrentPage}
         />)
     }
+    if(currentPage == "VotingRound1"){
+      return(<VotingRound1  
+        movieData = {movieData} 
+        userInputTitle = {userInputTitle}
+        movieRoomID = {roomIDData}
+        addButton = {addButton}
+        setCurrentPage = {setCurrentPage}
+        />)
+    }
     //Base State is landing page
     return(<LandingPage 
       movieData = {movieData} 
-      roomData = {roomData} 
+      roomIDData = {roomData} 
       createRoom = {makeRoom} 
       guestSearch = {guestSearch} 
       setCurrentPage = {setCurrentPage}

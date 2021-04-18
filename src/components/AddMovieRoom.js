@@ -29,7 +29,6 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCu
                     while(checkedForTitle == false && count < movieData.length){
                         if(title.toLocaleLowerCase() === movieData[count].movieName.toLocaleLowerCase()){
                             console.log('in buisness')
-                            
                             addButton(title)
                             titleFound = true
                             checkedForTitle = true
@@ -39,6 +38,7 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCu
                     }
                     if(titleFound === true) {
                        console.log(movieData[count-1]._id) 
+                       setCurrentPage("VotingRound1")
                     } else {
                         alert('Movie not in Netflix Database');
                     }
