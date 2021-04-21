@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Button from "./Button"
-import Movies from "./Movies"
 import Axios from "axios"
 
 
@@ -8,10 +7,10 @@ import Axios from "axios"
 
 //left off needing to go through the title to get entries
 //then need to go through movieData to check for title in array
-const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, getSuggestionListID, userInputTitle, setCurrentPage }) => {
+const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, makeMovieMapArr, getSuggestionIDList, userInputTitle, setCurrentPage }) => {
     const [title, setTitle] = useState('')
 
-    const createSuggestion = async (mName) => {
+    const createSuggestion = async (_callback, mName) => {
         console.log("This is the name that the suggestion will create with", mName)
         //creates a new suggestion in DB using the movie lookup title
         const createSuggestion = await Axios.post("http://localhost:3003/api/suggestions/create", { name: mName })
@@ -22,6 +21,7 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, getSugge
         const res = await Axios.put(`http://localhost:3003/api/rooms/addSuggestion/${mongoRoomID}`, { suggestion: sugID})
 
         console.log(res.data)
+        _callback();
     }
 
     return (
@@ -54,8 +54,9 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, getSugge
                         count++
                     }
                     if(titleFound === true) {
-                        createSuggestion(movieData[count-1].movieName).then(() => {
-                            setCurrentPage("VotingRound1")
+                        createSuggestion(getSuggestionIDList, movieData[count-1].movieName).then(() => {
+                            makeMovieMapArr()
+                            setCurrentPage("VotingRound1") 
                         })
                        
                     } else {

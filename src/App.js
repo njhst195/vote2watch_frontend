@@ -10,6 +10,7 @@ import HostGameRoom from './components/HostGameRoom';
 import GuestGameRoom from './components/GuestGameRoom';
 import VotingRound1 from './components/VotingRound1'
 
+
 // TODO: Learn about state and setting state
 //===============================================
 
@@ -28,7 +29,8 @@ const App = () => {
   const [movieData, setMovieData] = useState([])
   const [roomIDData, setRoomIDData] = useState([])
 
-  const [allSuggestionList, setAllSuggestionList] = useState([])
+  const [mapMovies, setMapMovies] = useState([])
+
 
   const [mongoRoomID, setMongoRoomID] = useState("")
 
@@ -81,6 +83,7 @@ const App = () => {
         roomData = {roomData} 
         getSuggestionIDList = {getSuggestionIDList}
         movieData = {movieData} 
+        makeMovieMapArr = {makeMovieMapArr}
         mongoRoomID = {mongoRoomID} 
         userInputTitle = {userInputTitle}
         movieRoomID = {roomIDData}
@@ -91,10 +94,11 @@ const App = () => {
     if(currentPage == "VotingRound1"){
       return(<VotingRound1  
         movieData = {movieData} 
+        mapMovies = {mapMovies}
         userInputTitle = {userInputTitle}
         movieRoomID = {roomIDData}
+        roomData = {roomData}
         mongoRoomID = {mongoRoomID}
-        allSuggestionList = {allSuggestionList}
         addButton = {addButton}
         setCurrentPage = {setCurrentPage}
         />)
@@ -110,6 +114,58 @@ const App = () => {
       />)
   }
 
+
+  const makeMovieMapArr = () => {
+     console.log("inside make movie array")
+    var mapArray = [{}]
+
+    var IDArr = []
+    var suggArr = []
+    
+
+    const getSuggestionsInRoom = async (IDArr, suggArr) => {
+        console.log(IDArr)
+        console.log(suggArr)
+
+        var mapCount = 0
+
+        var sugCount, IDCount
+
+        for (sugCount = 0; sugCount < suggArr.length; sugCount++) {
+            for (IDCount = 0; IDCount < IDArr.length; IDCount++) {
+                if (suggArr[sugCount]._id === IDArr[IDCount]) {
+                   mapArray[mapCount] = suggArr[sugCount]
+                   mapCount++
+                }
+                
+            }
+        }
+        console.log(suggArr[0]._id)
+        console.log(mapArray[0])
+        setMapMovies(mapArray)
+    }
+
+    const getRoomSuggestionIDs = async (_callback, id) => {
+            console.log("Room Id to get suggestions for", id)
+            const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${id}`)
+            IDArr = res.data
+            console.log("Suggestion ID array inside original get", IDArr)
+            _callback(IDArr, suggArr)
+    }
+
+    const findSuggArr = async(_callback) => {
+        const res = await Axios.get("http://localhost:3003/api/suggestions/findAll")
+        suggArr = res.data
+        _callback(getSuggestionsInRoom, mongoRoomID)
+    }
+
+
+    findSuggArr(getRoomSuggestionIDs)
+  }
+
+
+
+  
     //OnClick for host room button
   const makeRoom = async() => {
     const movieRoomID = GenRoomID()
@@ -136,9 +192,10 @@ const App = () => {
     const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${mongoRoomID}`)
     const suggList = res.data
     console.log(suggList)
-    setAllSuggestionList(suggList)
     return suggList
   }
+
+
 
 
   //use effect (same as ComponentDidMount), runs when component renders
