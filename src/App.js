@@ -28,6 +28,10 @@ const App = () => {
   const [movieData, setMovieData] = useState([])
   const [roomIDData, setRoomIDData] = useState([])
 
+  const [allSuggestionList, setAllSuggestionList] = useState([])
+
+  const [mongoRoomID, setMongoRoomID] = useState("")
+
   const [userInputTitle, setUserInputTitle] = useState("")
   
   //state of the current page
@@ -75,7 +79,9 @@ const App = () => {
     if(currentPage == "AddMovieRoom") {
       return(<AddMovieRoom 
         roomData = {roomData} 
+        getSuggestionIDList = {getSuggestionIDList}
         movieData = {movieData} 
+        mongoRoomID = {mongoRoomID} 
         userInputTitle = {userInputTitle}
         movieRoomID = {roomIDData}
         addButton = {addButton}
@@ -87,6 +93,8 @@ const App = () => {
         movieData = {movieData} 
         userInputTitle = {userInputTitle}
         movieRoomID = {roomIDData}
+        mongoRoomID = {mongoRoomID}
+        allSuggestionList = {allSuggestionList}
         addButton = {addButton}
         setCurrentPage = {setCurrentPage}
         />)
@@ -107,7 +115,9 @@ const App = () => {
     const movieRoomID = GenRoomID()
     const res = await Axios.post("http://localhost:3003/api/rooms/create", { name: movieRoomID });
     console.log(res.data)
+    console.log("Mongo Room ID", res.data._id)
 
+    setMongoRoomID(res.data._id)
     setRoomIDData(res.data.name)
   }
 
@@ -121,6 +131,15 @@ const App = () => {
     setUserInputTitle(movieTitle)
   }
 
+  const getSuggestionIDList = async () => {
+    console.log("Gets in func in app")
+    const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${mongoRoomID}`)
+    const suggList = res.data
+    console.log(suggList)
+    setAllSuggestionList(suggList)
+    return suggList
+  }
+
 
   //use effect (same as ComponentDidMount), runs when component renders
   useEffect(() => {
@@ -128,7 +147,6 @@ const App = () => {
     const getRooms = async() => {
       const roomsFromBackend = await fetchRooms()
       setRoomData(roomsFromBackend)
-      console.log(roomData)
     }
     //calls the fetch movies and changes state of movieData
     const getMovies = async() => {

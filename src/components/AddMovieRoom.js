@@ -3,10 +3,26 @@ import Button from "./Button"
 import Movies from "./Movies"
 import Axios from "axios"
 
+
+
+
 //left off needing to go through the title to get entries
 //then need to go through movieData to check for title in array
-const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCurrentPage }) => {
+const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, getSuggestionListID, userInputTitle, setCurrentPage }) => {
     const [title, setTitle] = useState('')
+
+    const createSuggestion = async (mName) => {
+        console.log("This is the name that the suggestion will create with", mName)
+        //creates a new suggestion in DB using the movie lookup title
+        const createSuggestion = await Axios.post("http://localhost:3003/api/suggestions/create", { name: mName })
+        //gets the _id of the new suggestion
+        const sugID = createSuggestion.data._id
+        console.log("The new suggestion id is", sugID)
+        //takes the _id of that suggestion, and stores it in the room's movieList string array using the room's _id
+        const res = await Axios.put(`http://localhost:3003/api/rooms/addSuggestion/${mongoRoomID}`, { suggestion: sugID})
+
+        console.log(res.data)
+    }
 
     return (
         <form className = 'add-form'>
@@ -38,8 +54,10 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, userInputTitle, setCu
                         count++
                     }
                     if(titleFound === true) {
-                       console.log(movieData[count-1]._id) 
-                       setCurrentPage("VotingRound1")
+                        createSuggestion(movieData[count-1].movieName).then(() => {
+                            setCurrentPage("VotingRound1")
+                        })
+                       
                     } else {
                         alert('Movie not in Netflix Database');
                     }
