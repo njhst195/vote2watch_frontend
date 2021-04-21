@@ -34,12 +34,6 @@ export const LandingPage = ({ roomData, movieRoomID, createRoom, guestSearch, se
                     setCurrentPage("GuestGameRoom")
                 }} />
             </div>
-            <div>
-                <h2>Available Rooms:</h2>
-                {roomData.map((room) => (<h3 key = {room._id}>
-                    {room.name} || {room.round}
-                </h3>))}
-            </div>
         </div>
     )
 }

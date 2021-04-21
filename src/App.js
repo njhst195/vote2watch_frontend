@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import HostGameRoom from './components/HostGameRoom';
 import GuestGameRoom from './components/GuestGameRoom';
 import VotingRound1 from './components/VotingRound1'
+import FinishGameRoom from './components/FinishGameRoom';
 
 
 // TODO: Learn about state and setting state
@@ -30,7 +31,7 @@ const App = () => {
   const [roomIDData, setRoomIDData] = useState([])
 
   const [mapMovies, setMapMovies] = useState([])
-
+  const [winningMovie, setWinningMovie] = useState("")
 
   const [mongoRoomID, setMongoRoomID] = useState("")
 
@@ -95,13 +96,25 @@ const App = () => {
       return(<VotingRound1  
         movieData = {movieData} 
         mapMovies = {mapMovies}
+        makeMovieMapArr = {makeMovieMapArr}
         userInputTitle = {userInputTitle}
         movieRoomID = {roomIDData}
         roomData = {roomData}
         mongoRoomID = {mongoRoomID}
         addButton = {addButton}
         setCurrentPage = {setCurrentPage}
+        setMovieWin = {setMovieWin}
         />)
+    }
+    if(currentPage == "finishGame"){
+      return(<FinishGameRoom 
+        setMovieWin = {setMovieWin}
+        winningMovie = {winningMovie}
+        setCurrentPage = {setCurrentPage}
+        mongoRoomID = {mongoRoomID}
+        mapMovies = {mapMovies}
+        movieData = {movieData}
+      />)
     }
     //Base State is landing page
     return(<LandingPage 
@@ -164,6 +177,9 @@ const App = () => {
   }
 
 
+  const setMovieWin = (movie) => {
+    setWinningMovie(movie)
+  }
 
   
     //OnClick for host room button

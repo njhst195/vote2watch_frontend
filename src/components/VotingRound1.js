@@ -1,65 +1,42 @@
 import { useState, useEffect } from 'react'
 import Axios from 'axios'
+import Button from "./Button"
 
-const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, mapMovies, roomData, mongoRoomID, movieRoomID }) => {
+const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, setMovieWin, makeMovieMapArr, mapMovies, roomData, mongoRoomID, movieRoomID }) => {
     var roundNum = 1
-    var mapArray = [{}]
     
-    // var IDArr = []
-    // var suggArr = []
-    
+    const addVote = async(id) => {
+        const res = await Axios.put(`http://localhost:3003/api/suggestions/updateVotes/${id}`)
+        const data = res.data
+        await makeMovieMapArr()
+        setCurrentPage("VotingRound1") 
+        
+        console.log(data)
+    }
 
-    // const getSuggestionsInRoom = async (IDArr, suggArr) => {
-    //     console.log(IDArr)
-    //     console.log(suggArr)
+    const addVeto = async(id) => {
+        const res = await Axios.put(`http://localhost:3003/api/suggestions/updateVetos/${id}`)
+        const data = res.data
+        await makeMovieMapArr()
+        setCurrentPage("VotingRound1")
+        
+        
+        console.log(data)
+    }
 
-    //     var mapCount = 0
+    const finishGame = async() => {
+        const win = mapMovies[0].name
 
-    //     var sugCount, IDCount
+        for (var i = 1; i < mapMovies.length; i++) {
+            if (mapMovies[i].votes > mapMovies[i-1].votes) {
+                win = mapMovies[i]
+            }
+        }
+        setMovieWin(win)
 
-    //     for (sugCount = 0; sugCount < suggArr.length; sugCount++) {
-    //         for (IDCount = 0; IDCount < IDArr.length; IDCount++) {
-    //             if (suggArr[sugCount]._id === IDArr[IDCount]) {
-    //                mapArray[mapCount] = suggArr[sugCount]
-    //                mapCount++
-    //             }
-                
-    //         }
-    //     }
-    //     console.log(suggArr[0]._id)
-    //     console.log(mapArray[0])
+        setCurrentPage("finishGame")
+    }
 
-    // }
-
-    // const getRoomSuggestionIDs = async (_callback, id) => {
-    //         console.log("Room Id to get suggestions for", id)
-    //         const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${id}`)
-    //         IDArr = res.data
-    //         console.log("Suggestion ID array inside original get", IDArr)
-    //         _callback(IDArr, suggArr)
-    // }
-
-    // const findSuggArr = async(_callback) => {
-    //     const res = await Axios.get("http://localhost:3003/api/suggestions/findAll")
-    //     suggArr = res.data
-    //     _callback(getSuggestionsInRoom, mongoRoomID)
-    // }
-
-
-    
-
-
-    // console.log(roomData)
-    // console.log(mongoRoomID)
-    // console.log(movieData)
-    // console.log(userInputTitle)
-    // console.log(movieRoomID)
-
-
-    // findSuggArr(getRoomSuggestionIDs)
- 
-    
-    
     return(
         <div>
             <h1>You are in room: {movieRoomID}</h1>
@@ -68,8 +45,18 @@ const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, mapMovies, ro
             <div>
             <h2>Movie Suggestions:</h2>
                 {mapMovies.map((movie) => (<h3 key = {movie._id}>
-                    {movie.name} || {movie.votes} || {movie.vetos}
+                    {movie.name} || {movie.votes} <Button text = "votes" color = "grey" onClick = {() => {
+                        addVote(movie._id)}}
+                        />
+                        || {movie.vetos} <Button text = "vetos" color = "red" onClick = {() => {
+                        addVeto(movie._id)}}
+                        />
                 </h3>))}
+            </div>
+            <div>
+                <Button text = "Finish Game" color = "red" onClick ={() => {
+                    finishGame()
+                    }}/>
             </div>
         </div>
         
