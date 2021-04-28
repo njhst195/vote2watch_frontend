@@ -5,7 +5,7 @@ import Axios from "axios"
 // const reactRouter = require("react-router-dom")
 
 //Landing page component
-export const LandingPage = ({ roomData, movieRoomID, createRoom, guestSearch, setCurrentPage }) => {
+export const LandingPage = ({ roomData, createUser, movieRoomID, createRoom, guestSearch, setCurrentPage }) => {
 
 
     // console.log(reactRouter.useHistory())
@@ -31,6 +31,7 @@ export const LandingPage = ({ roomData, movieRoomID, createRoom, guestSearch, se
             <div>
                 <Button text = "Find Game" onClick = {() => {
                     guestSearch()
+                    createUser()
                     setCurrentPage("GuestGameRoom")
                 }} />
             </div>

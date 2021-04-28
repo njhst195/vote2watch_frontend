@@ -28,7 +28,9 @@ const App = () => {
   //state constants, and their set functions for rooms and movies
   const [roomData, setRoomData] = useState([])
   const [movieData, setMovieData] = useState([])
-  const [roomIDData, setRoomIDData] = useState([])
+  const [roomIDData, setRoomIDData] = useState("")
+
+  const [userMongoID, setUserMongoID] = useState("")
 
   const [mapMovies, setMapMovies] = useState([])
   const [winningMovie, setWinningMovie] = useState("")
@@ -74,7 +76,11 @@ const App = () => {
     if (currentPage == "GuestGameRoom") {
       return(<GuestGameRoom 
         roomData = {roomData}
+        roomIDData = {roomIDData}
         movieData = {movieData} 
+        userMongoID = {userMongoID} 
+        findRoomByCode = {findRoomByCode}
+        updateUserRoom = {updateUserRoom}
         setCurrentPage = {setCurrentPage} 
         guestSearch = {guestSearch}
         />)
@@ -122,14 +128,15 @@ const App = () => {
       roomIDData = {roomIDData}
       roomData = {roomData} 
       createRoom = {makeRoom} 
+      createUser = {createUser} 
       guestSearch = {guestSearch} 
       setCurrentPage = {setCurrentPage}
       />)
   }
 
-
+  //compares the IDs of the movieList string array in a room, and the IDs in all the suggestions
+  //sets the useState for movies to be mapped to an array of objects 
   const makeMovieMapArr = () => {
-     console.log("inside make movie array")
     var mapArray = [{}]
 
     var IDArr = []
@@ -137,8 +144,6 @@ const App = () => {
     
 
     const getSuggestionsInRoom = async (IDArr, suggArr) => {
-        console.log(IDArr)
-        console.log(suggArr)
 
         var mapCount = 0
 
@@ -153,8 +158,6 @@ const App = () => {
                 
             }
         }
-        console.log(suggArr[0]._id)
-        console.log(mapArray[0])
         setMapMovies(mapArray)
     }
 
@@ -162,8 +165,8 @@ const App = () => {
             console.log("Room Id to get suggestions for", id)
             const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${id}`)
             IDArr = res.data
-            console.log("Suggestion ID array inside original get", IDArr)
             _callback(IDArr, suggArr)
+    
     }
 
     const findSuggArr = async(_callback) => {
@@ -186,8 +189,6 @@ const App = () => {
   const makeRoom = async() => {
     const movieRoomID = GenRoomID()
     const res = await Axios.post("http://localhost:3003/api/rooms/create", { name: movieRoomID });
-    console.log(res.data)
-    console.log("Mongo Room ID", res.data._id)
 
     setMongoRoomID(res.data._id)
     setRoomIDData(res.data.name)
@@ -207,12 +208,31 @@ const App = () => {
     console.log("Gets in func in app")
     const res = await Axios.get(`http://localhost:3003/api/rooms/findAllSuggestions/${mongoRoomID}`)
     const suggList = res.data
-    console.log(suggList)
     return suggList
   }
 
+  const updateUserRoom = async (userID, roomID) => {
+    console.log("user mongo id in update", userID)
+    console.log("room 4-digit id", roomID)
+    const res = await Axios.put(`http://localhost:3003/api/users/updateRoom/${userID}`, { room: roomID});
+  }
 
+  const createUser = async () => {
+    const res = await Axios.post('http://localhost:3003/api/users/create')
+    const data = res.data
+    console.log(res.data)
+    setUserMongoID(res.data._id)
+    console.log("user mongo id", res.data._id)
+    return data
+  }
 
+  const findRoomByCode = async (code) => {
+    const res = await Axios.get(`http://localhost:3003/api/rooms/findOnebyCode/${code}`)
+    const data = res.data
+    setMongoRoomID(res.data._id)
+    console.log(mongoRoomID)
+    return data
+  }
 
   //use effect (same as ComponentDidMount), runs when component renders
   useEffect(() => {

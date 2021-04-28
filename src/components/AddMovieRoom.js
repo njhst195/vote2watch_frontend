@@ -16,11 +16,8 @@ const AddMovieRoom = ({ movieData, movieRoomID, addButton, mongoRoomID, makeMovi
         const createSuggestion = await Axios.post("http://localhost:3003/api/suggestions/create", { name: mName })
         //gets the _id of the new suggestion
         const sugID = createSuggestion.data._id
-        console.log("The new suggestion id is", sugID)
         //takes the _id of that suggestion, and stores it in the room's movieList string array using the room's _id
         const res = await Axios.put(`http://localhost:3003/api/rooms/addSuggestion/${mongoRoomID}`, { suggestion: sugID})
-
-        console.log(res.data)
         _callback();
     }
 

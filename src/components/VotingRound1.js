@@ -25,7 +25,7 @@ const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, setMovieWin, 
     }
 
     const finishGame = async() => {
-        const win = mapMovies[0].name
+        var win = mapMovies[0].name
 
         for (var i = 1; i < mapMovies.length; i++) {
             if (mapMovies[i].votes > mapMovies[i-1].votes) {
@@ -45,7 +45,7 @@ const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, setMovieWin, 
             <div>
             <h2>Movie Suggestions:</h2>
                 {mapMovies.map((movie) => (<h3 key = {movie._id}>
-                    {movie.name} || {movie.votes} <Button text = "votes" color = "grey" onClick = {() => {
+                    {movie.name} || {movie.votes} <Button text = "votes" color = "green" onClick = {() => {
                         addVote(movie._id)}}
                         />
                         || {movie.vetos} <Button text = "vetos" color = "red" onClick = {() => {
@@ -54,7 +54,7 @@ const VotingRound1 = ({ setCurrentPage, movieData, userInputTitle, setMovieWin, 
                 </h3>))}
             </div>
             <div>
-                <Button text = "Finish Game" color = "red" onClick ={() => {
+                <Button text = "Finish Game" color = "grey" onClick ={() => {
                     finishGame()
                     }}/>
             </div>

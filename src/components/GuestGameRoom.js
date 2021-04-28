@@ -2,8 +2,12 @@ import Button from "./Button"
 import { useState, useEffect } from 'react';
 
 
-export const GuestGameRoom = ({ roomData, setCurrentPage, guestSearch }) => {
+export const GuestGameRoom = ({ roomData, roomIDData, userMongoID, updateUserRoom, findRoomByCode, setCurrentPage, guestSearch }) => {
     const [searchRoom, setSearchRoom] = useState('')
+
+    const getRoomMongoID = async () => {
+        await findRoomByCode(searchRoom)
+    }
 
     return(
         <form className = 'roomSearch-form'>
@@ -22,17 +26,22 @@ export const GuestGameRoom = ({ roomData, setCurrentPage, guestSearch }) => {
                     var roomFound = false
 
                     while(checkedForRoom == false){
-                    for(var i = 0; i < roomData.length; i++){
-                        if(searchRoom.toLocaleLowerCase() === roomData[i].name.toLocaleLowerCase()){
-                            console.log('Room Exists')
-                            roomFound = true
-                            checkedForRoom = true
+                        for(var i = 0; i < roomData.length; i++){
+                            if(searchRoom.toLocaleLowerCase() === roomData[i].name.toLocaleLowerCase()){
+                                console.log('Room Exists')
+                                roomFound = true
+                                checkedForRoom = true
+                            }
                         }
-                    }
                     checkedForRoom = true
-                }
+                    }
                     if(roomFound === false){
                         alert('Room does not exist');
+                    } else {
+                        updateUserRoom(userMongoID, searchRoom).then(() => {
+                            getRoomMongoID()
+                            setCurrentPage("AddMovieRoom") 
+                        }) 
                     }
                 }}/>
             <Button color = "red" text = "Exit" onClick = {() => {
